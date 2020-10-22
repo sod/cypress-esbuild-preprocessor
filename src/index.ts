@@ -1,6 +1,7 @@
 import * as path from "path";
 import * as fs from "fs";
-import { FSWatcher } from "fs";
+import type { FSWatcher } from "fs";
+import type { BuildOptions } from "esbuild";
 
 const bundles = new Map<string, Promise<string>>();
 const watching = new Set<string>();
@@ -29,16 +30,13 @@ export interface CallbackPreprocessorAdapter {
   options: CypressPreprocessorOptions;
 }
 
-export interface EsbuildPreprocessorAdapterOptions {
-  resolveExtensions?: string[]; // default [".ts", ".js", ".mjs", ".json"]
-  minify?: boolean; // default false
-  bundle?: boolean; // default true
+export interface EsbuildPreprocessorAdapterOptions
+  extends CypressPreprocessorOptions {
+  esbuild?: BuildOptions;
 }
 
 export function esbuildPreprocessorAdapter(
-  options: Partial<
-    EsbuildPreprocessorAdapterOptions & CypressPreprocessorOptions
-  > = {}
+  options?: EsbuildPreprocessorAdapterOptions
 ): CallbackPreprocessorAdapter {
   const { build } = require("esbuild");
 
@@ -50,10 +48,10 @@ export function esbuildPreprocessorAdapter(
         resolveExtensions: [".ts", ".js", ".mjs", ".json"],
         minify: false,
         bundle: true,
-        ...options,
+        ...(options?.esbuild ?? {}),
       }).then(() => undefined);
     },
-    options,
+    options: options ?? {},
   };
 }
 
@@ -101,9 +99,7 @@ export function cypressPreprocessor(
 }
 
 export function cypressEsbuildPreprocessor(
-  options: Partial<
-    EsbuildPreprocessorAdapterOptions & CypressPreprocessorOptions
-  > = {}
+  options?: EsbuildPreprocessorAdapterOptions
 ): CypressPlugin {
   return cypressPreprocessor(esbuildPreprocessorAdapter(options));
 }

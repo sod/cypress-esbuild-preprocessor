@@ -20,7 +20,9 @@ module.exports = (on, config) => {
     on(
         'file:preprocessor',
         cypressEsbuildPreprocessor({
-            tsconfig: path.resolve(__dirname, '../../tsconfig.json'),
+            esbuild: {
+                tsconfig: path.resolve(__dirname, '../../tsconfig.json'),
+            },
         }),
     );
 };
