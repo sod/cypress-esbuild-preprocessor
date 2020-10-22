@@ -15,6 +15,10 @@
     "preprocessor",
     "esbuild"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sod/cypress-esbuild-preprocessor"
+  },
   "author": "alexvonweiss@googlemail.com",
   "license": "ISC",
   "devDependencies": {
