@@ -20,7 +20,8 @@ module.exports = (on, config) => {
     on(
         'file:preprocessor',
         cypressEsbuildPreprocessor({
-            esbuild: {
+            esbuildOptions: {
+                // optional tsconfig for typescript support and path mapping (see https://github.com/evanw/esbuild for all options)
                 tsconfig: path.resolve(__dirname, '../../tsconfig.json'),
             },
         }),
